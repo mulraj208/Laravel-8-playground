@@ -17,13 +17,8 @@ use App\Models\User;
 */
 
 Route::get( '/', function () {
-    return view( 'welcome' );
-} );
-
-Route::get( '/posts', function () {
-    return view( 'post', [
-//        'post' => Post::all() // N + 1 Problem
-        'post' => Post::latest()->with('category', 'author')->get()
+    return view( 'posts', [
+        'posts' => Post::latest()->get()
     ] );
 } );
 
@@ -33,16 +28,14 @@ Route::get( '/posts/{post:slug}', function ( Post $post ) {
     ] );
 } );
 
-Route::get( '/categories/{category:slug}', function (Category $category) {
-    return view( 'category', [
+Route::get( '/categories/{category:slug}', function ( Category $category ) {
+    return view( 'posts', [
         'posts' => $category->posts
     ] );
 } );
 
-Route::get( '/authors/{author}', function (User $author) {
-    dd($author->posts);
-
-    return view( 'category', [
+Route::get( '/authors/{author}', function ( User $author ) {
+    return view( 'posts', [
         'posts' => $author->posts
     ] );
 } );
